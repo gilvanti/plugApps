@@ -9,6 +9,8 @@ class MeetingCreateForm(forms.ModelForm):
     imagem = forms.ImageField(widget=ClearableFileInput)
     data_hora = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
 
+
+
     class Meta:
         model = Meeting
         exclude = ["user"]

@@ -47,7 +47,7 @@ def meetup_create(request):
                 meeting.user = request.user
 
                 if not Meeting.valida_local(meeting.local):
-                    messages.warning(request, "Verifique sua coordenada.")
+                    messages.warning(request, "Verifique sua coordenada, -7.6567567, 34.7866788 , seria uma coordenada válida. ")
                 else:
                     location = geolocator.reverse(meeting.local)
                     if not location.address:
