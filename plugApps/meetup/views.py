@@ -47,7 +47,7 @@ def meetup_detail(request, id):
     """View para visualizar o detalhes de uma Reunião"""
 
     meetup = get_object_or_404(Meeting, pk=id)
-    print(meetup)
+
     return render(request, 'meetup/meetup_detail.html', locals())
 
 

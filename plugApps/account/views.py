@@ -69,7 +69,7 @@ class ConfirmRegistrationView(View):
         if user.confirmation_token.is_confirmed:
             messages.warning(
                 request, 'Cadastro do usuário já foi confirmado.')
-            return redirect('account:confirm')
+            return redirect('meetup:meetup_list')
 
         print(user.confirmation_token.data_criacao)
 
@@ -84,4 +84,4 @@ class ConfirmRegistrationView(View):
             messages.warning(
                 request, 'Chave de confirmação inválida.')
 
-        return render(request, "account/confirmation.html", locals())
+        return redirect('meetup:meetup_list')
