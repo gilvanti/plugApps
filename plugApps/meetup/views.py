@@ -8,6 +8,9 @@ from plugApps.tasks import send_confirmation_inscricao
 from datetime import datetime, timezone, timedelta
 from django.contrib import messages
 import json
+from django.contrib.auth.decorators import login_required
+
+
 
 
 
@@ -25,7 +28,7 @@ def meetup_list(request):
                                                         'meetups': meetup_filter,
                                                         'titulo': 'Reuniões'})
 
-
+@login_required
 def meetup_create(request):
     """View para Criar a Reunião"""
 
@@ -55,7 +58,7 @@ def meetup_detail(request, id):
     return render(request, 'meetup/meetup_detail.html', locals())
 
 
-
+@login_required
 def meetup_edit(request, id):
     """"View para Editar uma Reunião"""
 
@@ -83,7 +86,7 @@ def meetup_edit(request, id):
 
     return render(request, "meetup/cadastro.html", locals())
 
-
+@login_required
 def inscricao_create(request, id):
     """View pararealizar incrição na Reunião"""
 
@@ -114,7 +117,7 @@ def inscricao_create(request, id):
 
     return redirect(reverse("meetup:detail", args=[meeting.id]))
 
-
+@login_required
 def inscricao_list(request):
     """View para listar inscrições de usuario logado."""
 
@@ -134,13 +137,13 @@ def inscricao_list(request):
                                                         'meetups': meetup_filter,
                                                         'titulo': 'Minhas inscrições'})
 
-
+@login_required
 def reuniao_list_user(request):
     """View para listar reuniões cadastrada pelo usuario logado."""
 
     meetups = Meeting.objects.filter(user=request.user)
     meetup_filter = MeetingFilter(request.GET, queryset=meetups)
-    meeting = meetup_filter.qs
+    meeting = meetup_filter.qs@permission_required("meetup.add_meeting", raise_exception=True)
     paginator = Paginator(meeting, 3)
     page = request.GET.get('page')
     meeting = paginator.get_page(page)
@@ -149,7 +152,7 @@ def reuniao_list_user(request):
                                                         'meetups': meetup_filter,
                                                         'titulo': 'Minhas reuniões'})
 
-
+@login_required
 def proximas_reunioes(request):
     """View listar minhas inscrições"""
 
