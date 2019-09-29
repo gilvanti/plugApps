@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy as reverse
 from meetup.models import Meeting, Inscricao
+from meetup.filters import MeetingFilter
 from meetup.forms import MeetingCreateForm, MeetingEditForm
 from django.core.paginator import Paginator
 from plugApps.tasks import send_confirmation_inscricao
@@ -14,11 +15,15 @@ def meetup_list(request):
     """View para Listar Reuniões"""
 
     meetups = Meeting.objects.all()
-    paginator = Paginator(meetups, 3)
+    meetup_filter = MeetingFilter(request.GET, queryset=meetups)
+    meeting = meetup_filter.qs
+    paginator = Paginator(meeting, 3)
     page = request.GET.get('page')
-    meetups = paginator.get_page(page)
+    meeting = paginator.get_page(page)
 
-    return render(request, 'meetup/meetup_list.html', {'meetups': meetups, 'titulo': 'Reuniões'})
+    return render(request, 'meetup/meetup_list.html', {'meeting': meeting,
+                                                        'meetups': meetup_filter,
+                                                        'titulo': 'Reuniões'})
 
 
 def meetup_create(request):
@@ -34,7 +39,6 @@ def meetup_create(request):
                 messages.warning(request, "Você não pode cadastrar uma reunião numa data que já passou.")
             else:
                 meeting.user = request.user
-                # meeting.local = geolocator.reverse("52.509669, 13.376294")    user_list = Meeting.objects.all()
                 meeting.save()
 
                 messages.success(request, "Reunião cadastrada  com sucesso.")
@@ -120,12 +124,14 @@ def inscricao_list(request):
         inscricao.append(item.meeting_id)
 
     meetups = Meeting.objects.filter(id__in=inscricao)
-
-    paginator = Paginator(meetups, 3)
+    meetup_filter = MeetingFilter(request.GET, queryset=meetups)
+    meeting = meetup_filter.qs
+    paginator = Paginator(meeting, 3)
     page = request.GET.get('page')
-    meetups = paginator.get_page(page)
+    meeting = paginator.get_page(page)
 
-    return render(request, 'meetup/meetup_list.html', {'meetups': meetups,
+    return render(request, 'meetup/meetup_list.html', {'meeting': meeting,
+                                                        'meetups': meetup_filter,
                                                         'titulo': 'Minhas inscrições'})
 
 
@@ -133,11 +139,14 @@ def reuniao_list_user(request):
     """View para listar reuniões cadastrada pelo usuario logado."""
 
     meetups = Meeting.objects.filter(user=request.user)
-    paginator = Paginator(meetups, 3)
+    meetup_filter = MeetingFilter(request.GET, queryset=meetups)
+    meeting = meetup_filter.qs
+    paginator = Paginator(meeting, 3)
     page = request.GET.get('page')
-    meetups = paginator.get_page(page)
+    meeting = paginator.get_page(page)
 
-    return render(request, 'meetup/meetup_list.html', {'meetups': meetups,
+    return render(request, 'meetup/meetup_list.html', {'meeting': meeting,
+                                                        'meetups': meetup_filter,
                                                         'titulo': 'Minhas reuniões'})
 
 

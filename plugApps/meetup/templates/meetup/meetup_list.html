@@ -31,44 +31,54 @@
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">
 				<h1 class="display-4">{{titulo}}</h1>
+				<form method="get">
+					{{ meetups.form.as_p }}
+					<button type="submit" class="btn btn-primary">
+						<span></span> Pesquisar
+					</button>
+				</form>
 			</div>
 		</div>
 
-		<ul>
-		<div class="row">
-				{% for meetup in meetups %}
-				<div class="col">
-					<div class="card" style="width: 18rem;">
-						<img class="card-img-top" src="{{ MEDIA_URL }}{{ meetup.imagem.url }}" alt="Card image cap">
-						<div class="card-body">
-							<h5 class="card-title">{{ meetup.titulo }}</h5>
-							<p class="card-text">Dia da reunião: {{ meetup.data_hora|date:"d.M.Y" }}</p>
-							<p class="card-text">Hora da reunião: {{ meetup.data_hora|date:"H:i"  }}</p>
-							<p>Criado por: {{ meetup.user.first_name }}</p>
-							<a href="{% url 'meetup:detail' meetup.pk %}" class="btn btn-primary">Ver detalhes da reunião</a>
-						</div>
-					</div>
+
+	<div class="row">
+		{% for meetup in meeting %}
+		<div class="col">
+			<div class="card" style="width: 18rem;">
+				<img class="card-img-top" src="{{ MEDIA_URL }}{{ meetup.imagem.url }}" alt="Card image cap">
+				<div class="card-body">
+					<h5 class="card-title">{{ meetup.titulo }}</h5>
+					<p class="card-text">Dia da reunião: {{ meetup.data_hora|date:"d.M.Y" }}</p>
+					<p class="card-text">Hora da reunião: {{ meetup.data_hora|date:"H:i"  }}</p>
+					<p>Criado por: {{ meetup.user.first_name }}</p>
+					<a href="{% url 'meetup:detail' meetup.pk %}" class="btn btn-primary">Ver detalhes da reunião</a>
 				</div>
-				{% endfor %}
+			</div>
 		</div>
-		{% if meetups.paginator.num_pages > 1 %}
+		{% endfor %}
+	</div>
+
+	{% if meeting.paginator.num_pages > 1 %}
 			<div class="pagination">
 				<span class="step-links">
-						{% if meetups.has_previous %}
-								<a href="?page={{ meetups.previous_page_number }}">Anterior</a>
+						{% if meeting.has_previous %}
+								<a href="?page={{ meeting.previous_page_number }}">Anterior</a>
 						{% endif %}
 
 						<span class="current">
-								{{ meetups.number }} de {{ meetups.paginator.num_pages }}
+								{{ meeting.number }} de {{ meeting.paginator.num_pages }}
 						</span>
 
-						{% if meetups.has_next %}
-								<a href="?page={{ meetups.next_page_number }}">Próxima</a>
+						{% if meeting.has_next %}
+								<a href="?page={{ meeting.next_page_number }}">Próxima</a>
 						{% endif %}
 				</span>
 			</div>
 		{% endif %}
-	</div>
+
+		</div>
+
+
 </body>
 <script>
   $(function () {
