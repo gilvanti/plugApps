@@ -1,0 +1,14 @@
+{% block content %}
+
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Crie sua conta{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4 offset-md-3">
+        {% for msg in messages %}
+          {{msg}}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

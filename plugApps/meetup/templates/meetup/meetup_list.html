@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Listagem de Reuniões{% endblock %}
+
+{% block content %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Example</title>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+<!-- XDSoft DateTimePicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+<body>
+	{% if messages %}
+	<ul class="message-in">
+			{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+					{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+					{{ message }}
+			</li>
+			{% endfor %}
+	</ul>
+	{% endif %}
+	<div class="container">
+		<div class="jumbotron jumbotron-fluid">
+			<div class="container">
+				<h1 class="display-4">{{titulo}}</h1>
+			</div>
+		</div>
+
+		<ul>
+		<div class="row">
+				{% for meetup in meetups %}
+				<div class="col">
+					<div class="card" style="width: 18rem;">
+						<img class="card-img-top" src="{{ MEDIA_URL }}{{ meetup.imagem.url }}" alt="Card image cap">
+						<div class="card-body">
+							<h5 class="card-title">{{ meetup.titulo }}</h5>
+							<p class="card-text">Dia da reunião: {{ meetup.data_hora|date:"d.M.Y" }}</p>
+							<p class="card-text">Hora da reunião: {{ meetup.data_hora|date:"H:i"  }}</p>
+							<p>Criado por: {{ meetup.user.first_name }}</p>
+							<a href="{% url 'meetup:detail' meetup.pk %}" class="btn btn-primary">Ver detalhes da reunião</a>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+		</div>
+		{% if meetups.paginator.num_pages > 1 %}
+			<div class="pagination">
+				<span class="step-links">
+						{% if meetups.has_previous %}
+								<a href="?page={{ meetups.previous_page_number }}">Anterior</a>
+						{% endif %}
+
+						<span class="current">
+								{{ meetups.number }} de {{ meetups.paginator.num_pages }}
+						</span>
+
+						{% if meetups.has_next %}
+								<a href="?page={{ meetups.next_page_number }}">Próxima</a>
+						{% endif %}
+				</span>
+			</div>
+		{% endif %}
+	</div>
+</body>
+<script>
+  $(function () {
+    $("#id_data_hora").datetimepicker({
+      format: 'Y-m-d H:i',
+    });
+  });
+</script>
+
+{% endblock %}

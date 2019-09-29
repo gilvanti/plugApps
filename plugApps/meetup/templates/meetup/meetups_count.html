@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+
+<div class="container">
+    <div class="section-bar">
+
+      <h1 class="title">Próximas Reuniões</h1>
+
+      <div class="col">
+        <p><b>Total de reuniões nas próximas 24H :</b> {{ dia }}</p>
+        <p><b>Total de reuniões nos próximos 7 dias:</b> {{ semana }}</p>
+        <p><b>Total de reuniões nos próximos 30 dias:</b> {{ mes  }}</p>
+
+      </div>
+
+</div>
+</body>
+
+
+{% endblock %}
