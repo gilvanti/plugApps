@@ -18,7 +18,7 @@ class Meeting(models.Model):
     descricao =  models.TextField()
     data_hora = models.DateTimeField()
     imagem = models.ImageField()
-    local = models.CharField(max_length=60)
+    local = models.CharField(max_length=255)
     user =  models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -28,6 +28,18 @@ class Meeting(models.Model):
         super(Meeting, self).save(*args, **kwargs)
         resize.delay(json.dumps(str(self.imagem)))
 
+    def valida_local(local):
+        validacao = []
+        validacao =  local.split(',')
+        if len(validacao) == 2:
+            x = validacao[0].replace('-','').replace('.','')
+            y = validacao[0].replace('-','').replace('.','')
+            if x.isdigit() and y.isdigit():
+                return True;
+            else:
+                return False;
+        else:
+            return False;
 
 class Inscricao(models.Model):
     """

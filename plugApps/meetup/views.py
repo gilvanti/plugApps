@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from plugApps.tasks import send_confirmation_inscricao
 from datetime import datetime, timezone, timedelta
 from django.contrib import messages
+from geopy.geocoders import Nominatim
 import json
 from django.contrib.auth.decorators import login_required
 
@@ -36,16 +37,28 @@ def meetup_create(request):
     if request.method == 'POST':
         form = MeetingCreateForm(request.POST, request.FILES)
 
+
         if form.is_valid():
+            geolocator = Nominatim(user_agent="plugApps")
             meeting = form.save(commit=False)
             if meeting.data_hora < datetime.now(timezone.utc):
                 messages.warning(request, "Você não pode cadastrar uma reunião numa data que já passou.")
             else:
                 meeting.user = request.user
-                meeting.save()
 
-                messages.success(request, "Reunião cadastrada  com sucesso.")
-                return redirect(reverse("meetup:detail", args=[meeting.pk]))
+                if not Meeting.valida_local(meeting.local):
+                    messages.warning(request, "Verifique sua coordenada.")
+                else:
+                    location = geolocator.reverse(meeting.local)
+                    if not location.address:
+                        meeting.local = "Local não definido, pelo criador da reunião."
+                    else:
+                        meeting.local = location.address
+
+                    meeting.save()
+
+                    messages.success(request, "Reunião cadastrada  com sucesso.")
+                    return redirect(reverse("meetup:detail", args=[meeting.pk]))
 
     return render(request, "meetup/cadastro.html", locals())
 
