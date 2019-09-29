@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+  redis:
+    image: "redis:alpine"
+  web:
+    build: .
+    command: bash -c "python /code/plugApps/manage.py makemigrations --noinput && python /code/plugApps/manage.py migrate --noinput && python /code/plugApps/manage.py runserver 0.0.0.0:8000"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+  celery:
+    build: .
+    command: bash -c "cd /code/plugApps && celery -A plugApps worker -l info"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
