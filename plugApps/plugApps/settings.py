@@ -121,7 +121,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = 'meetup_list'
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = 'meetup:meetup_list'
 LOGOUT_REDIRECT_URL = 'meetup:meetup_list'
 
 
