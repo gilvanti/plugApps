@@ -7,13 +7,18 @@ class MeetingCreateForm(forms.ModelForm):
     """Formulário para criação de reuniões"""
 
     imagem = forms.ImageField(widget=ClearableFileInput)
-    data_hora = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
-
+    data_hora = forms.DateTimeField(label='Data e Hora da Reunião',input_formats=['%d/%m/%Y %H:%M'])
+    local = forms.CharField(label='Localização',widget=forms.TextInput(attrs={'placeholder':'Informe as coordenadas no formato: -7.6567567, 34.7866788'}))
 
 
     class Meta:
         model = Meeting
         exclude = ["user"]
+        labels = {
+            'titulo': 'Título',
+            'descricao': 'Descrição da Reunião',
+        }
+
 
     def clean_foto(self):
         """Valida formato do arquivo anexado"""
@@ -28,11 +33,16 @@ class MeetingEditForm(forms.ModelForm):
     """Formulário para edição de reuniões"""
 
     imagem = forms.ImageField(widget=ClearableFileInput)
-    data_hora = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+    data_hora = forms.DateTimeField(label='Data e Hora da Reunião',input_formats=['%d/%m/%Y %H:%M'])
+    local = forms.CharField(label='Localização',widget=forms.TextInput(attrs={'placeholder':'Informe as coordenadas no formato: -7.6567567, 34.7866788'}))
 
     class Meta:
         model = Meeting
         exclude = ["user"]
+        labels = {
+            'titulo': 'Título',
+            'descricao': 'Descrição da Reunião',
+        }
 
     def clean_foto(self):
         """Valida formato do arquivo anexado"""

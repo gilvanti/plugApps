@@ -156,7 +156,7 @@ def reuniao_list_user(request):
 
     meetups = Meeting.objects.filter(user=request.user)
     meetup_filter = MeetingFilter(request.GET, queryset=meetups)
-    meeting = meetup_filter.qs@permission_required("meetup.add_meeting", raise_exception=True)
+    meeting = meetup_filter.qs
     paginator = Paginator(meeting, 3)
     page = request.GET.get('page')
     meeting = paginator.get_page(page)
