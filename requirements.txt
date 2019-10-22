@@ -5,7 +5,7 @@ billiard==3.5.0.5
 celery==4.2.1
 certifi==2019.9.11
 chardet==3.0.4
-Django==2.1.5
+Django==2.1.11
 django-bootstrap-form==3.4
 django-filter==2.2.0
 geographiclib==1.50
